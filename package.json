@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ogp-scraper": "^1.0.0"
+    "open-graph-scraper": "^3.3.0"
   }
 }
