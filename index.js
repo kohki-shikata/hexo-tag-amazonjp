@@ -1,7 +1,9 @@
 'use strict';
 const util = require('hexo-util');
 const ogs = require('open-graph-scraper');
+
 const amazonid = hexo.config.amazonjp.amazonid ? hexo.config.amazonjp.amazonid : '';
+
 const descriptionLength = (hexo.config.linkPreview && hexo.config.linkPreview.descriptionLength)
                             ? hexo.config.linkPreview.descriptionLength : 140;
 const className = (hexo.config.linkPreview && hexo.config.linkPreview.className)
@@ -14,21 +16,34 @@ hexo.extend.tag.register('amazonjp', function(args) {
   if(hexo.config.amazonjp.amazonid) {
     url += '?tag=' + hexo.config.amazonjp.amazonid;
   }
-  const imageUrl = 'http://images-jp.amazon.com/images/P/' + asin + '.09.LZZZZZZZ.jpg'
+  const endpoint = 'http://images-jp.amazon.com/images/P/';
+  const country = '09';
 
-  return getTag({url: url}, imageUrl).then(tag => {
+
+
+  return getTag({url: url, size: args[1], target: args[2], rel: args[4]}, endpoint, asin, country).then(tag => {
     return tag;
   });
 }, {async: true});
 
-async function getTag(options, imageUrl) {
+async function getTag(options, endpoint, asin, country, size) {
   return ogs(options)
     .then(function (result) {
       const ogp = result.data;
       let image = '';
       let descriptions = '';
 
-      image += util.htmlTag('img', { src: imageUrl } , '');
+      const sizeset = {
+        thumb: 'THUMBZZZ',
+        small: 'TZZZZZZZ',
+        medium: 'MZZZZZZZ',
+        large: 'LZZZZZZZ'
+      };
+
+      const imgsize = sizeset[`${options.size}`];
+      const imgUrl = endpoint + asin + '.' + country + '.' + imgsize;
+
+      image += util.htmlTag('img', { src: imgUrl } , '');
       image = util.htmlTag('div', { class: 'og-image'}, image)
 
       descriptions += util.htmlTag('div', { class: 'og-title' }, ogp.ogTitle);
