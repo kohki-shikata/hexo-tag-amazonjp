@@ -1,6 +1,7 @@
 'use strict';
 const util = require('hexo-util');
 const ogs = require('open-graph-scraper');
+const amazonid = hexo.config.amazonjp.amazonid ? hexo.config.amazonjp.amazonid : '';
 const descriptionLength = (hexo.config.linkPreview && hexo.config.linkPreview.descriptionLength)
                             ? hexo.config.linkPreview.descriptionLength : 140;
 const className = (hexo.config.linkPreview && hexo.config.linkPreview.className)
@@ -9,7 +10,10 @@ const className = (hexo.config.linkPreview && hexo.config.linkPreview.className)
 hexo.extend.tag.register('amazonjp', function(args) {
 
   const asin = args[0];
-  const url = 'https://www.amazon.co.jp/dp/' + asin;
+  let url = 'https://www.amazon.co.jp/dp/' + asin;
+  if(hexo.config.amazonjp.amazonid) {
+    url += '?tag=' + hexo.config.amazonjp.amazonid;
+  }
   const imageUrl = 'http://images-jp.amazon.com/images/P/' + asin + '.09.LZZZZZZZ.jpg'
 
   return getTag({url: url}, imageUrl).then(tag => {
