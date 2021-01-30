@@ -16,7 +16,7 @@ hexo.extend.tag.register('amazonjp', function(args) {
   if(hexo.config.amazonjp.amazonid) {
     url += '?tag=' + hexo.config.amazonjp.amazonid;
   }
-  const endpoint = 'http://images-jp.amazon.com/images/P/';
+  const endpoint = 'https://images-na.ssl-images-amazon.com/images/P/';
   const country = '09';
 
 
